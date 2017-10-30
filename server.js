@@ -13,7 +13,7 @@ app.get('/scrape', function(req, res){
       var $ = cheerio.load(html);
 
       var title, release, rating;
-      var json = { title : "", release : "", rating : ""};
+      var json = { title : "", release : "", rating : "", summary:""};
 
       $('.title_wrapper').filter(function(){
         var data = $(this);
@@ -30,6 +30,13 @@ app.get('/scrape', function(req, res){
 
         json.rating = rating;
       })
+
+      $('.summary_text').filter(function(){
+        var data = $(this);
+        credit= data.text().trim();
+        //credit=data.children().first().children().last().text().trim();
+        json.summary = credit;
+      })
     }
 
     fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){
@@ -41,5 +48,5 @@ app.get('/scrape', function(req, res){
 })
 
 app.listen('8081')
-console.log('see the port :8081/scrape');
+console.log('see the port :8000/scrape');
 exports = module.exports = app;
